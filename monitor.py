@@ -35,7 +35,7 @@ def api(path, token=None, params=None, body=None):
 
 
 def get_token():
-    password_hash = hashlib.sha256(env("DEYE_PASSWORD").encode()).hexdigest().lower()
+    password_hash = hashlib.sha256(env("DEYE_PASSWORD").encode()).hexdigest().upper()
     data = api(
         "/account/token",
         params={"appId": env("DEYE_APP_ID")},

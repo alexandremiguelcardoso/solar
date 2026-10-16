@@ -8,7 +8,7 @@ import requests
 
 BASE = os.environ.get("DEYE_BASE_URL", "https://eu1-developer.deyecloud.com/v1.0")
 STATE_FILE = "state.json"
-ALERT_W = int(os.environ.get("ALERT_W") or "300")        # avisa quando a importação da rede passa disto (W)
+ALERT_W = int(os.environ.get("ALERT_W") or "200")        # avisa quando a importação da rede passa disto (W)
 RESET_W = int(os.environ.get("RESET_W") or str(ALERT_W // 2))  # só volta a "normal" abaixo disto (W)
 MIN_GEN_W = int(os.environ.get("MIN_GEN_W", "50"))       # abaixo disto = noite, sem alertas
 NOTIFY_RETURN = os.environ.get("NOTIFY_RETURN", "false").lower() == "true"

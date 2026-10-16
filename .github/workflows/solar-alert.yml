@@ -1,0 +1,42 @@
+name: Alerta solar
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: solar-alert
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Restaurar estado anterior
+        uses: actions/cache@v4
+        with:
+          path: state.json
+          key: state-${{ github.run_id }}
+          restore-keys: state-
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Correr verificação
+        env:
+          DEYE_APP_ID: ${{ secrets.DEYE_APP_ID }}
+          DEYE_APP_SECRET: ${{ secrets.DEYE_APP_SECRET }}
+          DEYE_EMAIL: ${{ secrets.DEYE_EMAIL }}
+          DEYE_PASSWORD: ${{ secrets.DEYE_PASSWORD }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          ALERTAS: ${{ vars.ALERTAS }}
+          ALERT_W: ${{ vars.ALERT_W }}
+          RESET_W: ${{ vars.RESET_W }}
+        run: |
+          pip install requests
+          python monitor.py
